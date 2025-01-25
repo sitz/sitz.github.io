@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
@@ -30,21 +31,27 @@
 
         .container {
             display: flex;
-            flex-direction: row;
-            justify-content: center;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: center;
             padding: 20px;
         }
 
         .list-container {
-            flex: 1 1 45%;
-            margin: 10px;
+            width: 80%;
+            margin: 10px 0;
             padding: 20px;
             border: 1px solid #ddd;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             background-color: #f9f9f9;
             text-align: center;
+        }
+
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            allow: "fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         }
 
         .logo {
@@ -57,16 +64,16 @@
 <body>
 <div class="container">
     <div class="list-container">
-        <a href="https://twitter.com/siteshps/lists/1865412858835865726" target="_blank">
-            <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg">
-            <p>View list on X</p>
-        </a>
+        <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg" alt="X Logo"><br>
+        <a href="https://twitter.com/siteshps/lists/1865412858835865726" target="_blank">Visit X List</a>
     </div>
     <div class="list-container">
-        <a href="https://bsky.app/profile/siteshps.bsky.social/lists/3lcptcq7cvg2l" target="_blank">
-            <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Bluesky_Logo.svg">
-            <p>View list on Bluesky</p>
-        </a>
+        <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Bluesky_Logo.svg" alt="Bluesky Logo"><br>
+        <a href="https://bsky.app/profile/siteshps.bsky.social/lists/3lcptcq7cvg2l" target="_blank">Visit Bluesky List</a>
+    </div>
+    <div class="list-container">
+        <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/4/48/Mastodon_Logotype_%28Simple%29.svg" alt="Mastodon Logo"><br>
+        <a href="https://mastodon.social/lists/109020" target="_blank">Visit Mastodon List</a>
     </div>
 </div>
 </body>
