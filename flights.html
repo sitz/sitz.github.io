@@ -23,7 +23,6 @@
     <title>Flights taken by Sitesh</title>
 
     <script src="https://unpkg.com/globe.gl"></script>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         html, body {
@@ -54,8 +53,6 @@
              pointer-events: none; /* Allow interaction with globe beneath tooltip */
         }
 
-        /* Removed #loading CSS rule */
-
     </style>
 </head>
 <body>
@@ -63,7 +60,7 @@
 
     <script>
         // --- globe.gl Configuration ---
-        const POINT_SIZE = 0.05; // Relative radius for points
+        const POINT_SIZE = 0.1; // Relative radius for points
         const ROTATION_SPEED = 0.3; // Degrees per frame for auto-rotation
 
         // --- Flight Data ---
@@ -1391,7 +1388,26 @@
             const arcsData = [];
             const pointsMap = new Map();
             const cityColors = new Map();
+            const uniqueCities = new Set();
 
+            // First pass: Collect unique city names
+            data.forEach(flight => {
+                if (flight.startCity) uniqueCities.add(flight.startCity);
+                if (flight.endCity) uniqueCities.add(flight.endCity);
+            });
+
+            // Assign distinct colors to unique cities
+            const cityArray = Array.from(uniqueCities);
+            const numCities = cityArray.length;
+            cityArray.forEach((city, index) => {
+                const hue = Math.round((index * 360) / numCities);
+                // Use fixed saturation and lightness for now, adjust if needed
+                cityColors.set(city, `hsl(${hue}, 70%, 55%)`);
+            });
+            // Assign a default color for 'Unknown' if necessary
+            const defaultColor = 'hsl(0, 0%, 80%)'; // Grey
+
+            // Second pass: Process flights and assign data using the generated colors
             data.forEach(flight => {
                 const startCoords = parseLatLng(flight.startLatLng);
                 const endCoords = parseLatLng(flight.endLatLng);
@@ -1403,16 +1419,9 @@
                     return;
                 }
 
-                // --- Assign Colors ---
-                if (!cityColors.has(startCity)) {
-                    cityColors.set(startCity, stringToHslColor(startCity));
-                }
-                const startColor = cityColors.get(startCity);
-
-                 if (!cityColors.has(endCity)) {
-                    cityColors.set(endCity, stringToHslColor(endCity));
-                }
-                const endColor = cityColors.get(endCity);
+                // Get pre-assigned colors
+                const startColor = cityColors.get(startCity) || defaultColor;
+                const endColor = cityColors.get(endCity) || defaultColor;
 
                 // --- Process Arcs ---
                 arcsData.push({
@@ -1446,7 +1455,7 @@
                         lng: endCoords.lon,
                         name: endCity,
                         size: POINT_SIZE,
-                        color: endColor
+                        color: endColor // Use pre-assigned color
                     });
                 }
             });
@@ -1467,9 +1476,6 @@
             // Get processed data
             const { arcsData, pointsData } = processFlightData(flightData);
 
-            // Coordinates for centering on India
-            const indiaCenterCoords = { lat: 21, lng: 78, altitude: 2.0 }; // Adjusted altitude
-
             myGlobe = Globe()
                 (globeContainer)
                 .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
@@ -1479,40 +1485,21 @@
                 // Arcs layer configuration
                 .arcsData(arcsData)
                 .arcColor(d => d.arcColor)
-                .arcStroke(0.5)
-                .arcDashLength(0.5)
-                .arcDashGap(0.2)
-                .arcDashAnimateTime(2000)
-                .arcAltitude(0.25)
+                .arcAltitudeAutoScale(1)
+                .arcLabelAllowHTML(true)
                 .arcLabel(d => `
                     <b>${d.startCity} &rarr; ${d.endCity}</b><br>
                     Distance: ${formatDistance(d.distance)} km<br>
                     Duration: ${formatDuration(d.duration)}
                 `)
-                .arcLabelAllowHTML(true)
 
                 // Points layer configuration
                 .pointsData(pointsData)
                 .pointColor(d => d.color)
-                .pointAltitude(0.01)
-                .pointRadius(d => d.size)
-                .pointLabel(d => d.name)
-                .pointLabelAllowHTML(true);
+                .pointLabelAllowHTML(true)
+                .pointLabel(d => `<span>✈️ ${d.name}</span>`); // Add icon to tooltip HTML
 
             myGlobe.labelTooltipClass('globe-tooltip');
-
-            // Set initial camera position to India
-            myGlobe.pointOfView(indiaCenterCoords);
-
-            // --- Add auto-rotation ---
-            const controls = myGlobe.controls();
-            controls.autoRotate = true;
-            controls.autoRotateSpeed = ROTATION_SPEED; // Use constant for speed
-            // Optional: Stop rotation on user interaction for better control
-            controls.addEventListener('start', () => {
-                controls.autoRotate = false;
-            });
-
 
             console.log("globe.gl initialized.");
 
