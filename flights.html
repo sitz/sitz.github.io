@@ -22,8 +22,10 @@
 
     <title>Flights taken by Sitesh</title>
 
-    <script src="https://unpkg.com/globe.gl"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Import Apache ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <!-- ECharts GL is required for the globe component -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts-gl@2/dist/echarts-gl.min.js"></script>
     <style>
         html, body {
             width: 100%;
@@ -31,38 +33,20 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background-color: #000; /* Black background */
+            /* Let ECharts control background if needed, or set a default */
+            /* background-color: #000; */
         }
         #globeViz {
             width: 100%;
             height: 100%;
-            cursor: grab; /* Indicate draggable */
         }
-        #globeViz:active {
-            cursor: grabbing; /* Indicate dragging */
-        }
-         /* Style for tooltip labels */
-        .globe-tooltip {
-             background: rgba(0, 0, 0, 0.75);
-             color: #fff;
-             padding: 5px 8px;
-             border-radius: 4px;
-             font-size: 0.8rem;
-             white-space: pre-wrap; /* Allow line breaks */
-             text-align: left;
-             pointer-events: none; /* Allow interaction with globe beneath tooltip */
-        }
-
+        /* Removed custom tooltip styles */
     </style>
 </head>
 <body>
     <div id="globeViz"></div>
 
     <script>
-        // --- globe.gl Configuration ---
-        const POINT_SIZE = 0.1; // Relative radius for points
-        const ROTATION_SPEED = 0.3; // Degrees per frame for auto-rotation
-
         // --- Flight Data ---
         const flightData = [
           {
@@ -1339,28 +1323,28 @@
 
         // --- Globals ---
         const globeContainer = document.getElementById('globeViz');
-        let myGlobe; // globe.gl instance
+        let myChart; // ECharts instance
 
         // --- Helper Functions ---
 
         // Helper to parse LatLng string -> {lat, lon}
         function parseLatLng(latLngString) {
-            if (!latLngString) return null;
+            if (!latLngString) return { lat: NaN, lon: NaN }; // Return NaN for invalid input
             const parts = latLngString.replace(/°/g, '').split(',');
-            if (parts.length !== 2) return null;
+            if (parts.length !== 2) return { lat: NaN, lon: NaN };
             const lat = parseFloat(parts[0]);
             const lon = parseFloat(parts[1]);
-            if (isNaN(lat) || isNaN(lon)) return null;
-            return { lat, lon };
+            // Return NaN if parsing fails
+            return { lat: isNaN(lat) ? NaN : lat, lon: isNaN(lon) ? NaN : lon };
         }
 
         // Simple hash function to generate a color from a string (city name)
         function stringToHslColor(str, s = 70, l = 55) {
-            if (!str) return 'hsl(0, 0%, 80%)';
+            if (!str) return 'hsl(0, 0%, 80%)'; // Default grey
             let hash = 0;
             for (let i = 0; i < str.length; i++) {
                 hash = str.charCodeAt(i) + ((hash << 5) - hash);
-                hash = hash & hash;
+                hash = hash & hash; // Convert to 32bit integer
             }
             const h = Math.abs(hash % 360);
             return `hsl(${h}, ${s}%, ${l}%)`;
@@ -1373,21 +1357,21 @@
             const m = Math.floor((seconds % 3600) / 60);
             let str = '';
             if (h > 0) str += `${h}h `;
-            if (m > 0 || h === 0) str += `${m}m`;
-            return str.trim() || '0m';
+            if (m > 0 || h === 0) str += `${m}m`; // Show minutes even if 0 hours
+            return str.trim() || '0m'; // Handle case where duration is < 1 min
         }
 
         // Format distance in meters to km string
         function formatDistance(meters) {
              if (isNaN(meters) || meters === null || meters < 0) return 'N/A';
-             return Math.round(meters / 1000);
+             return `${Math.round(meters / 1000)} km`;
         }
 
-        // --- Data Processing ---
-        function processFlightData(data) {
-            const arcsData = [];
-            const pointsMap = new Map();
-            const cityColors = new Map();
+        // --- Data Processing for ECharts ---
+        function processFlightDataForEcharts(data) {
+            const linesData = [];
+            const pointsMap = new Map(); // Use Map to store unique points
+            const cityColors = new Map(); // Store generated colors
             const uniqueCities = new Set();
 
             // First pass: Collect unique city names
@@ -1396,26 +1380,26 @@
                 if (flight.endCity) uniqueCities.add(flight.endCity);
             });
 
-            // Assign distinct colors to unique cities
+             // Assign distinct HSL colors to unique cities
             const cityArray = Array.from(uniqueCities);
             const numCities = cityArray.length;
             cityArray.forEach((city, index) => {
                 const hue = Math.round((index * 360) / numCities);
-                // Use fixed saturation and lightness for now, adjust if needed
                 cityColors.set(city, `hsl(${hue}, 70%, 55%)`);
             });
-            // Assign a default color for 'Unknown' if necessary
-            const defaultColor = 'hsl(0, 0%, 80%)'; // Grey
+            const defaultColor = 'hsl(0, 0%, 80%)'; // Grey for unknown
 
-            // Second pass: Process flights and assign data using the generated colors
-            data.forEach(flight => {
+
+            // Second pass: Process flights and assign data
+            data.forEach((flight, index) => {
                 const startCoords = parseLatLng(flight.startLatLng);
                 const endCoords = parseLatLng(flight.endLatLng);
                 const startCity = flight.startCity || 'Unknown';
                 const endCity = flight.endCity || 'Unknown';
 
-                if (!startCoords || !endCoords) {
-                    console.warn("Skipping flight due to invalid coordinates:", flight);
+                // Skip if coordinates are invalid
+                if (isNaN(startCoords.lat) || isNaN(startCoords.lon) || isNaN(endCoords.lat) || isNaN(endCoords.lon)) {
+                    console.warn(`Skipping flight index ${index} due to invalid coordinates:`, flight);
                     return;
                 }
 
@@ -1423,93 +1407,243 @@
                 const startColor = cityColors.get(startCity) || defaultColor;
                 const endColor = cityColors.get(endCity) || defaultColor;
 
-                // --- Process Arcs ---
-                arcsData.push({
-                    startLat: startCoords.lat,
-                    startLng: startCoords.lon,
-                    endLat: endCoords.lat,
-                    endLng: endCoords.lon,
-                    startCity: startCity,
-                    endCity: endCity,
-                    arcColor: startColor,
-                    distance: flight.distanceMeters,
-                    duration: flight.durationSeconds
+                // --- Process Lines ---
+                linesData.push({
+                    coords: [
+                        [startCoords.lon, startCoords.lat], // ECharts uses [lon, lat]
+                        [endCoords.lon, endCoords.lat]
+                    ],
+                    // Store additional data for tooltips/styling if needed
+                    tooltipInfo: {
+                         from: startCity,
+                         to: endCity,
+                         distance: flight.distanceMeters,
+                         duration: flight.durationSeconds,
+                         color: startColor // Use start city color for the line
+                    }
                 });
 
                 // --- Process Points (Unique) ---
-                const startKey = `${startCoords.lat},${startCoords.lon}`;
+                // Use Lon,Lat as key for uniqueness
+                const startKey = `${startCoords.lon},${startCoords.lat}`;
                 if (!pointsMap.has(startKey)) {
                     pointsMap.set(startKey, {
-                        lat: startCoords.lat,
-                        lng: startCoords.lon,
                         name: startCity,
-                        size: POINT_SIZE,
-                        color: startColor
+                        value: [startCoords.lon, startCoords.lat, 0], // [lon, lat, altitude/value]
+                        itemStyle: { color: startColor },
+                        tooltipInfo: { city: startCity }
                     });
                 }
 
-                const endKey = `${endCoords.lat},${endCoords.lon}`;
+                const endKey = `${endCoords.lon},${endCoords.lat}`;
                 if (!pointsMap.has(endKey)) {
                      pointsMap.set(endKey, {
-                        lat: endCoords.lat,
-                        lng: endCoords.lon,
-                        name: endCity,
-                        size: POINT_SIZE,
-                        color: endColor // Use pre-assigned color
+                        name: endCity, // Used by default tooltip, but we'll customize
+                        value: [endCoords.lon, endCoords.lat, 0],
+                        itemStyle: { color: endColor },
+                        tooltipInfo: { city: endCity }
                     });
                 }
             });
 
             const pointsData = Array.from(pointsMap.values());
-            // Return only processed data
-            return { arcsData, pointsData };
+
+            return { linesData, pointsData };
         }
 
 
-        // --- globe.gl Initialization ---
-        function initGlobeGl() {
-             if (typeof Globe === 'undefined') {
-                 console.error("globe.gl library not loaded correctly.");
+        // --- ECharts Initialization ---
+        function initEchartsGlobe() {
+             if (typeof echarts === 'undefined') {
+                 console.error("ECharts library not loaded correctly.");
+                 document.getElementById('globeViz').innerText = 'Error: ECharts library failed to load.';
                  return;
              }
 
-            // Get processed data
-            const { arcsData, pointsData } = processFlightData(flightData);
+             myChart = echarts.init(globeContainer);
 
-            myGlobe = Globe()
-                (globeContainer)
-                .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
-                .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
-                .backgroundColor('rgba(0,0,0,0)')
+             // Get processed data
+             const { linesData, pointsData } = processFlightDataForEcharts(flightData);
 
-                // Arcs layer configuration
-                .arcsData(arcsData)
-                .arcColor(d => d.arcColor)
-                .arcAltitudeAutoScale(1)
-                .arcLabelAllowHTML(true)
-                .arcLabel(d => `
-                    <b>${d.startCity} &rarr; ${d.endCity}</b><br>
-                    Distance: ${formatDistance(d.distance)} km<br>
-                    Duration: ${formatDuration(d.duration)}
-                `)
+             const option = {
+                 backgroundColor: '#000', // Explicitly set background color
+                 tooltip: {
+                     trigger: 'item',
+                     formatter: function (params) {
+                        // Custom tooltip based on series type
+                        if (params.componentSubType === 'lines3D') {
+                            const info = params.data.tooltipInfo;
+                            return `<b>${info.from} &rarr; ${info.to}</b><br>` +
+                                   `Distance: ${formatDistance(info.distance)}<br>` +
+                                   `Duration: ${formatDuration(info.duration)}`;
+                        } else if (params.componentSubType === 'scatter3D') {
+                            const info = params.data.tooltipInfo;
+                             return `<b>✈️ ${info.city}</b>`;
+                        }
+                        return ''; // Default fallback
+                     },
+                     confine: true, // Keep tooltip within chart bounds
+                     textStyle: {
+                        fontSize: 14
+                     },
+                      borderWidth: 0, // Use CSS for border
+                      padding: 0, // Use CSS for padding
+                      extraCssText: 'background: transparent; box-shadow: none;' // Use CSS class styles
+                 },
+                 globe: {
+                     baseTexture: 'images/world.topo.bathy.200401.jpg',
+                     heightTexture: 'images/bathymetry_bw_composite_4k.jpg',
+                     environment: 'images/starfield.jpg',
+ 
+                     shading: 'realistic',
+                     realisticMaterial: {
+                         roughness: 0.8,
+                         metalness: 0
+                     },
+                     postEffect: {
+                         enable: true, // Enable post-processing effects like bloom
+                         // Optional: Add bloom effect
+                         // bloom: {
+                         //    enable: true,
+                         //    bloomIntensity: 0.1
+                         // }
+                     },
+                     temporalSuperSampling: { // Smoother edges when rotating
+                         enable: true
+                     },
+                     light: {
+                         main: {
+                             intensity: 2, // Stronger main light
+                             shadow: true // Enable shadows
+                         },
+                         ambient: {
+                             intensity: 0.5 // Ambient light
+                         },
+                         ambientCubemap: {
+                             texture: 'images/lake.hdr', // Environment map for reflections
+                             diffuseIntensity: 0.5,
+                             specularIntensity: 1
+                         }
+                     },
+                     viewControl: {
+                         autoRotate: true,
+                         autoRotateSpeed: 3, // Slower rotation speed
+                         targetCoord: [116.46, 39.92], // Initial view target (e.g., Beijing) - adjust as needed
+                         zoomSensitivity: 1.0, // Adjust zoom speed
+                         rotateSensitivity: 1.0, // Adjust rotation speed
+                         distance: 150 // Initial distance from globe center
+                     },
+                     atmosphere: {
+                         show: true, // Show atmospheric glow
+                         color: '#3a8fc1'
+                     },
+                    layers: [{ // Add a base layer for visual appeal if needed
+                        type: 'blend',
+                        texture: 'images/night.jpg', // Optional night texture
+                        shading: 'lambert',
+                        distance: 5 // Adjust distance if using night texture
+                    }]
+                 },
+                 series: [
+                     {
+                         name: 'Flights',
+                         type: 'lines3D',
+                         coordinateSystem: 'globe',
+                         data: linesData,
+                         effect: { // Add trail effect to lines
+                             show: true,
+                             period: 4, // Animation duration
+                             trailLength: 0.1, // Length of the trail
+                             color: '#fff', // Trail color
+                             symbolSize: 2 // Size of the moving symbol
+                         },
+                         lineStyle: {
+                             width: 1.5,
+                             // color: 'rgb(50, 50, 150)', // Default line color if not specified per line
+                             // color: function(params) { // Color line based on start city (if desired)
+                             //     return params.data.tooltipInfo.color || 'rgb(50, 50, 150)';
+                             // },
+                             opacity: 0.6 // Slightly transparent lines
+                         },
+                         blendMode: 'lighter', // Blend mode for visual effect
+                         tooltip: { // Ensure tooltip is configured for lines
+                            show: true,
+                            formatter: function(params) {
+                                const info = params.data.tooltipInfo;
+                                return `<b>${info.from} &rarr; ${info.to}</b><br>` +
+                                       `Distance: ${formatDistance(info.distance)}<br>` +
+                                       `Duration: ${formatDuration(info.duration)}`;
+                            }
+                         }
+                     },
+                     {
+                         name: 'Airports',
+                         type: 'scatter3D',
+                         coordinateSystem: 'globe',
+                         data: pointsData,
+                         symbol: 'pin', // Use 'pin' or 'circle' or other available symbols
+                         symbolSize: 8, // Size of the points
+                         itemStyle: {
+                             // Color is defined per point in processFlightDataForEcharts
+                             opacity: 0.9
+                         },
+                         label: { // Optionally show labels directly on the globe (can be cluttered)
+                             show: false,
+                             // formatter: '{b}', // {b} refers to the 'name' property
+                             // position: 'right',
+                             // textStyle: {
+                             //     color: '#fff',
+                             //     fontSize: 10,
+                             //     backgroundColor: 'rgba(0,0,0,0.5)',
+                             //     padding: [2, 4],
+                             //     borderRadius: 2
+                             // }
+                         },
+                         emphasis: { // Style on hover
+                             itemStyle: {
+                                 borderColor: '#fff',
+                                 borderWidth: 1
+                             },
+                             label: {
+                                 show: true,
+                                 formatter: function(params) { return params.data.tooltipInfo.city; },
+                                 position: 'top',
+                                 distance: 5,
+                                  textStyle: {
+                                    color: '#fff',
+                                    fontSize: 12,
+                                    backgroundColor: 'rgba(0,0,0,0.7)',
+                                    padding: [3, 5],
+                                    borderRadius: 3
+                                 }
+                             }
+                         },
+                          tooltip: { // Ensure tooltip is configured for points
+                            show: true,
+                            formatter: function(params) {
+                                const info = params.data.tooltipInfo;
+                                return `<b>✈️ ${info.city}</b>`;
+                            }
+                         }
+                     }
+                 ]
+             };
 
-                // Points layer configuration
-                .pointsData(pointsData)
-                .pointColor(d => d.color)
-                .pointLabelAllowHTML(true)
-                .pointLabel(d => `<span>✈️ ${d.name}</span>`); // Add icon to tooltip HTML
+             myChart.setOption(option);
+             console.log("ECharts globe initialized.");
 
-            myGlobe.labelTooltipClass('globe-tooltip');
-
-            console.log("globe.gl initialized.");
-
-            window.addEventListener('resize', () => {
-                 myGlobe.width(window.innerWidth);
-                 myGlobe.height(window.innerHeight);
-            });
+             // Add resize listener
+             window.addEventListener('resize', () => {
+                 myChart.resize();
+             });
         }
 
-        requestAnimationFrame(initGlobeGl);
+        // Initialize the chart when the DOM is ready
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            initEchartsGlobe();
+        } else {
+            document.addEventListener('DOMContentLoaded', initEchartsGlobe);
+        }
 
     </script>
 </body>
