@@ -1484,9 +1484,11 @@
                      },
                      confine: true, // Keep tooltip within chart bounds
                      textStyle: {
-                        fontSize: 14
+                        fontSize: 14,
+                        color: '#eee' // Set tooltip text color to light grey
                      },
-                      borderWidth: 0, // Use CSS for border
+                      // Rely on ECharts default tooltip styling
+                      // borderWidth: 0,
                       padding: 0, // Use CSS for padding
                       extraCssText: 'background: transparent; box-shadow: none;' // Use CSS class styles
                  },
@@ -1527,8 +1529,8 @@
                      },
                      viewControl: {
                          autoRotate: true,
-                         autoRotateSpeed: 3, // Slower rotation speed
-                         targetCoord: [116.46, 39.92], // Initial view target (e.g., Beijing) - adjust as needed
+                         autoRotateSpeed: 10, // Slower rotation speed
+                         targetCoord: [-122.431297, 37.773972, ], // Initial view target (e.g., Beijing) - adjust as needed
                          zoomSensitivity: 1.0, // Adjust zoom speed
                          rotateSensitivity: 1.0, // Adjust rotation speed
                          distance: 150 // Initial distance from globe center
@@ -1551,11 +1553,11 @@
                          coordinateSystem: 'globe',
                          data: linesData,
                          effect: { // Add trail effect to lines
-                             show: true,
-                             period: 4, // Animation duration
-                             trailLength: 0.1, // Length of the trail
-                             color: '#fff', // Trail color
-                             symbolSize: 2 // Size of the moving symbol
+                              show: true,
+                              period: 4, // Animation duration
+                              trailLength: 0.1, // Length of the trail
+                              color: '#fff', // Trail color
+                              symbolSize: 2 // Size of the moving symbol
                          },
                          lineStyle: {
                              width: 1.5,
@@ -1566,15 +1568,9 @@
                              opacity: 0.6 // Slightly transparent lines
                          },
                          blendMode: 'lighter', // Blend mode for visual effect
-                         tooltip: { // Ensure tooltip is configured for lines
-                            show: true,
-                            formatter: function(params) {
-                                const info = params.data.tooltipInfo;
-                                return `<b>${info.from} &rarr; ${info.to}</b><br>` +
-                                       `Distance: ${formatDistance(info.distance)}<br>` +
-                                       `Duration: ${formatDuration(info.duration)}`;
-                            }
-                         }
+                         tooltip: { // Explicitly enable tooltip for lines (uses global formatter)
+                             show: true
+                          }
                      },
                      {
                          name: 'Airports',
@@ -1605,11 +1601,11 @@
                                  borderWidth: 1
                              },
                              label: {
-                                 show: true,
+                                 show: false, // Disable emphasis label to avoid duplicate tooltips
                                  formatter: function(params) { return params.data.tooltipInfo.city; },
                                  position: 'top',
                                  distance: 5,
-                                  textStyle: {
+                                 textStyle: {
                                     color: '#fff',
                                     fontSize: 12,
                                     backgroundColor: 'rgba(0,0,0,0.7)',
