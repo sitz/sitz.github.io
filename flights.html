@@ -36,19 +36,32 @@
     <script src="https://cdn.jsdelivr.net/npm/echarts-gl@2/dist/echarts-gl.min.js"></script>
     <style>
         html, body {
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             padding: 0;
             overflow: hidden;
-            /* Let ECharts control background if needed, or set a default */
-            /* background-color: #000; */
+            background: #000;
+            touch-action: none;
         }
         #globeViz {
-            width: 100%;
-            height: 100%;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 100vw;
+            height: 100vh;
+            min-height: 100vh;
+            max-width: 100vw;
+            max-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        /* Removed custom tooltip styles */
+        body {
+            overscroll-behavior: none;
+        }
     </style>
 </head>
 <body>
@@ -166,6 +179,21 @@
             };
         }
 
+        // --- Responsive Globe Zoom and Centering ---
+        function getResponsiveDistance() {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            // Adjust distance based on the smaller dimension for best fit
+            if (Math.min(w, h) < 500) return 320; // Small mobile screens
+            if (Math.min(w, h) < 800) return 260; // Tablets/small laptops
+            return 240; // Desktops
+        }
+
+        function setGlobeOptionWithDistance(myChart, option) {
+            option.globe.viewControl.distance = getResponsiveDistance();
+            myChart.setOption(option, true);
+        }
+
         // --- Load flight data and initialize chart ---
         fetch('data/flights.json')
             .then(response => response.json())
@@ -234,10 +262,10 @@
                         viewControl: {
                             autoRotate: true,
                             autoRotateSpeed: 10, // Slower rotation speed
-                            targetCoord: [-122.431297, 37.773972, ], // Initial view target (e.g., Beijing) - adjust as needed
+                            targetCoord: [-122.431297, 37.773972], // Initial view target (e.g., Beijing) - adjust as needed
                             zoomSensitivity: 1.0, // Adjust zoom speed
                             rotateSensitivity: 1.0, // Adjust rotation speed
-                            distance: 150 // Initial distance from globe center
+                            distance: getResponsiveDistance() // Set initial distance responsively
                         },
                         atmosphere: {
                             show: true, // Show atmospheric glow
@@ -306,8 +334,10 @@
                 const myChart = echarts.init(document.getElementById('globeViz'));
                 myChart.setOption(option);
 
+                // Responsive: update globe zoom and keep centered on resize
                 window.addEventListener('resize', () => {
                     myChart.resize();
+                    setGlobeOptionWithDistance(myChart, option);
                 });
             });
     </script>
