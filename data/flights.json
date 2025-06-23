@@ -1720,6 +1720,16 @@
     "durationSeconds": 45179.0
   },
   {
+    "startTime": "2025-04-04T22:34:14.000+05:30",
+    "endTime": "2025-04-05T14:34:35.000+05:30",
+    "startCity": "San Francisco",
+    "startLatLng": "37.61881, -122.37542",
+    "endCity": "New Delhi",
+    "endLatLng": "28.5665, 77.1031",
+    "distanceMeters": 12380874.957311187,
+    "durationSeconds": 57621.0
+  },
+  {
     "startTime": "2025-04-05T17:41:41.000+05:30",
     "endTime": "2025-04-05T19:51:27.000+05:30",
     "startCity": "New Delhi",
