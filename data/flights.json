@@ -1788,5 +1788,25 @@
     "endLatLng": "23.3143, 85.3217",
     "distanceMeters": 1007666.353305645,
     "durationSeconds": 7671.0
+  },
+  {
+    "startTime": "2025-06-29T23:16:31.000+08:00",
+    "endTime": "2025-06-30T00:53:37.000+08:00",
+    "startCity": "Ranchi",
+    "startLatLng": "23.3143, 85.3217",
+    "endCity": "Kolkata",
+    "endLatLng": "22.6547, 88.4467",
+    "distanceMeters": 328189.28690942837,
+    "durationSeconds": 5826.0
+  },
+  {
+    "startTime": "2025-06-30T04:58:18.000+08:00",
+    "endTime": "2025-06-30T09:24:52.000+08:00",
+    "startCity": "Kolkata",
+    "startLatLng": "22.6547, 88.4467",
+    "endCity": "Singapore",
+    "endLatLng": "1.35019, 103.994",
+    "distanceMeters": 2903966.05369443,
+    "durationSeconds": 15994.0
   }
 ]
