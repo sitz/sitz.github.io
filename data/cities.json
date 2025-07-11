@@ -2268,6 +2268,24 @@
         "longitude": 25.2798
     },
     {
+        "name": "Johor Bahru",
+        "country": "Malaysia",
+        "latitude": 1.4655,
+        "longitude": 103.7578
+    },
+    {
+        "name": "Pekan Nenas",
+        "country": "Malaysia",
+        "latitude": 1.51,
+        "longitude": 103.5141
+    },
+    {
+        "name": "Skudai",
+        "country": "Malaysia",
+        "latitude": 1.53741,
+        "longitude": 103.65779
+    },
+    {
         "name": "La Condamine",
         "country": "Monaco",
         "latitude": 43.73439,
@@ -2896,6 +2914,12 @@
         "country": "Serbia",
         "latitude": 45.11667,
         "longitude": 21.30361
+    },
+    {
+        "name": "Singapore",
+        "country": "Singapore",
+        "latitude": 1.28967,
+        "longitude": 103.85007
     },
     {
         "name": "Arganzuela",
