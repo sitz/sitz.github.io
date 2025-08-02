@@ -1332,6 +1332,12 @@
         "longitude": 72.58727
     },
     {
+        "name": "Alandur",
+        "country": "India",
+        "latitude": 13.0025,
+        "longitude": 80.20611
+    },
+    {
         "name": "Alibag",
         "country": "India",
         "latitude": 18.64813,
@@ -1462,6 +1468,12 @@
         "country": "India",
         "latitude": 30.73629,
         "longitude": 76.7884
+    },
+    {
+        "name": "Chennai",
+        "country": "India",
+        "latitude": 13.08784,
+        "longitude": 80.27847
     },
     {
         "name": "Chetput",
@@ -2274,6 +2286,18 @@
         "longitude": 103.7578
     },
     {
+        "name": "Kampong Baharu Balakong",
+        "country": "Malaysia",
+        "latitude": 3.03333,
+        "longitude": 101.75
+    },
+    {
+        "name": "Kuala Lumpur",
+        "country": "Malaysia",
+        "latitude": 3.1412,
+        "longitude": 101.68653
+    },
+    {
         "name": "Pekan Nenas",
         "country": "Malaysia",
         "latitude": 1.51,
@@ -2284,6 +2308,12 @@
         "country": "Malaysia",
         "latitude": 1.53741,
         "longitude": 103.65779
+    },
+    {
+        "name": "Sungai Pelek New Village",
+        "country": "Malaysia",
+        "latitude": 2.65,
+        "longitude": 101.7
     },
     {
         "name": "La Condamine",

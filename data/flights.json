@@ -1790,23 +1790,33 @@
     "durationSeconds": 7671.0
   },
   {
-    "startTime": "2025-06-29T23:16:31.000+08:00",
-    "endTime": "2025-06-30T00:53:37.000+08:00",
-    "startCity": "Ranchi",
-    "startLatLng": "23.3143, 85.3217",
-    "endCity": "Kolkata",
-    "endLatLng": "22.6547, 88.4467",
-    "distanceMeters": 328189.28690942837,
-    "durationSeconds": 5826.0
-  },
-  {
-    "startTime": "2025-06-30T04:58:18.000+08:00",
-    "endTime": "2025-06-30T09:24:52.000+08:00",
+    "startTime": "2025-06-30T02:28:18.000+05:30",
+    "endTime": "2025-06-30T06:54:52.000+05:30",
     "startCity": "Kolkata",
     "startLatLng": "22.6547, 88.4467",
     "endCity": "Singapore",
     "endLatLng": "1.35019, 103.994",
     "distanceMeters": 2903966.05369443,
     "durationSeconds": 15994.0
+  },
+  {
+    "startTime": "2025-08-02T03:03:58.000+05:30",
+    "endTime": "2025-08-02T07:08:06.000+05:30",
+    "startCity": "Kuala Lumpur",
+    "startLatLng": "2.74558, 101.71",
+    "endCity": "Chennai",
+    "endLatLng": "12.99001, 80.1693",
+    "distanceMeters": 2628688.9469683166,
+    "durationSeconds": 14648.0
+  },
+  {
+    "startTime": "2025-08-02T16:44:27.000+05:30",
+    "endTime": "2025-08-02T19:37:33.000+05:30",
+    "startCity": "Chennai",
+    "startLatLng": "12.99001, 80.1693",
+    "endCity": "Ranchi",
+    "endLatLng": "23.3143, 85.3217",
+    "distanceMeters": 1270127.0131818077,
+    "durationSeconds": 10386.0
   }
 ]
