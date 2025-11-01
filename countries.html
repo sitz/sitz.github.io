@@ -46,54 +46,26 @@
 <div id="container"></div>
 <h3 align="center"></h3>
 <script>
-    var map = new Datamap({
-        element: document.getElementById('container'),
-        projection: 'mercator',
-        fills: {
-            defaultFill: 'skyblue',
-            travelled: 'darkgreen'
-        },
-        data: {
-            IND: {fillKey: "travelled"},
-            USA: {fillKey: "travelled"},
-            NLD: {fillKey: "travelled"},
-            BEL: {fillKey: "travelled"},
-            DEU: {fillKey: "travelled"},
-            HRV: {fillKey: "travelled"},
-            BIH: {fillKey: "travelled"},
-            MNE: {fillKey: "travelled"},
-            ALB: {fillKey: "travelled"},
-            MKD: {fillKey: "travelled"},
-            kosovo: {fillKey: "travelled"},
-            SRB: {fillKey: "travelled"},
-            ROU: {fillKey: "travelled"},
-            BGR: {fillKey: "travelled"},
-            GRC: {fillKey: "travelled"},
-            ESP: {fillKey: "travelled"},
-            AUT: {fillKey: "travelled"},
-            LIE: {fillKey: "travelled"},
-            CHE: {fillKey: "travelled"},
-            ITA: {fillKey: "travelled"},
-            FRA: {fillKey: "travelled"},
-            MCO: {fillKey: "travelled"},
-            CZE: {fillKey: "travelled"},
-            HUN: {fillKey: "travelled"},
-            DNK: {fillKey: "travelled"},
-            SWE: {fillKey: "travelled"},
-            FIN: {fillKey: "travelled"},
-            EST: {fillKey: "travelled"},
-            LVA: {fillKey: "travelled"},
-            LTU: {fillKey: "travelled"},
-            ISL: {fillKey: "travelled"},
-            PRT: {fillKey: "travelled"},
-            VAT: {fillKey: "travelled"},
-            HKG: {fillKey: "travelled"},
-            CHN: {fillKey: "travelled"},
-            SGP: {fillKey: "travelled"},
-            MYS: {fillKey: "travelled"},
-        }
-    });
-    document.body.querySelector('h3').innerText = `World Travel Stats (${Object.keys(window.map.options.data).length} / ${window.Datamap.prototype.worldTopo.objects.world.geometries.length})`;
+    var map;
+    fetch('data/countries.json')
+        .then(response => response.json())
+        .then(visitedCountries => {
+            const formattedData = {};
+            visitedCountries.forEach(country => {
+                formattedData[country] = {fillKey: 'travelled'};
+            });
+
+            map = new Datamap({
+                element: document.getElementById('container'),
+                projection: 'mercator',
+                fills: {
+                    defaultFill: 'skyblue',
+                    travelled: 'darkgreen'
+                },
+                data: formattedData
+            });
+            document.body.querySelector('h3').innerText = `World Travel Stats (${visitedCountries.length} / ${window.Datamap.prototype.worldTopo.objects.world.geometries.length})`;
+        });
 </script>
 
 </body>
