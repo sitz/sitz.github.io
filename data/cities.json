@@ -3258,6 +3258,36 @@
         "longitude": 55.41206
     },
     {
+        "name": "Bethnal Green",
+        "country": "United Kingdom",
+        "latitude": 51.52718,
+        "longitude": -0.06109
+    },
+    {
+        "name": "City of Westminster",
+        "country": "United Kingdom",
+        "latitude": 51.5,
+        "longitude": -0.11667
+    },
+    {
+        "name": "London",
+        "country": "United Kingdom",
+        "latitude": 51.50853,
+        "longitude": -0.12574
+    },
+    {
+        "name": "Poplar",
+        "country": "United Kingdom",
+        "latitude": 51.51113,
+        "longitude": -0.01565
+    },
+    {
+        "name": "West Drayton",
+        "country": "United Kingdom",
+        "latitude": 51.5,
+        "longitude": -0.46667
+    },
+    {
         "name": "Broadmoor",
         "country": "United States",
         "latitude": 37.6866,

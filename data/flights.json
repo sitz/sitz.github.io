@@ -1818,5 +1818,25 @@
     "endLatLng": "23.3143, 85.3217",
     "distanceMeters": 1270127.0131818077,
     "durationSeconds": 10386.0
+  },
+  {
+    "startTime": "2025-10-29T13:50:40.000+00:00",
+    "endTime": "2025-10-29T16:03:40.000+00:00",
+    "startCity": "Ranchi",
+    "startLatLng": "23.3143, 85.3217",
+    "endCity": "Mumbai",
+    "endLatLng": "19.0887, 72.8679",
+    "distanceMeters": 1373197.4216461384,
+    "durationSeconds": 7980.0
+  },
+  {
+    "startTime": "2025-10-30T09:58:01.000+00:00",
+    "endTime": "2025-10-30T20:00:27.000+00:00",
+    "startCity": "Mumbai",
+    "startLatLng": "19.0887, 72.8679",
+    "endCity": "London",
+    "endLatLng": "51.4706, -0.46194",
+    "distanceMeters": 7213041.234671325,
+    "durationSeconds": 36146.0
   }
 ]
