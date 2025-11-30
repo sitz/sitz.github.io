@@ -216,7 +216,6 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            showTab('tab1', 'countries.html');
             // Sidebar toggle logic
             const sidebar = document.querySelector('.sidebar');
             const toggleBtn = document.querySelector('.sidebar-toggle');
@@ -233,7 +232,7 @@
             <span>☰</span>
         </div>
         <div class="sidebar-content">
-            <div class="tab active" data-tab="tab1" onclick="showTab('tab1', 'countries.html')">Countries</div>
+            <div class="tab" data-tab="tab1" onclick="showTab('tab1', 'countries.html')">Countries</div>
             <div class="tab" data-tab="tab2" onclick="showTab('tab2', 'cities.html')">Cities</div>
             <div class="tab" data-tab="tab3" onclick="showTab('tab3', 'flights.html')">Flights</div>
             <div class="tab" data-tab="tab7" onclick="showTab('tab7', 'uber.html')">Uber</div>
