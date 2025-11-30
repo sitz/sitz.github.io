@@ -2778,10 +2778,52 @@
         "longitude": 74.34361
     },
     {
+        "name": "Ochota",
+        "country": "Poland",
+        "latitude": 52.22096,
+        "longitude": 20.98526
+    },
+    {
+        "name": "Poznan",
+        "country": "Poland",
+        "latitude": 52.40692,
+        "longitude": 16.92993
+    },
+    {
+        "name": "Praga Polnoc",
+        "country": "Poland",
+        "latitude": 52.25443,
+        "longitude": 21.03472
+    },
+    {
+        "name": "Srodmiescie",
+        "country": "Poland",
+        "latitude": 52.22904,
+        "longitude": 21.01644
+    },
+    {
+        "name": "Warsaw",
+        "country": "Poland",
+        "latitude": 52.22977,
+        "longitude": 21.01178
+    },
+    {
         "name": "Wlochy",
         "country": "Poland",
         "latitude": 52.17941,
         "longitude": 20.94612
+    },
+    {
+        "name": "Wola",
+        "country": "Poland",
+        "latitude": 52.2401,
+        "longitude": 20.98869
+    },
+    {
+        "name": "Wroclaw",
+        "country": "Poland",
+        "latitude": 51.1,
+        "longitude": 17.03333
     },
     {
         "name": "Albufeira",
@@ -3258,10 +3300,28 @@
         "longitude": 55.41206
     },
     {
+        "name": "Barnsbury",
+        "country": "United Kingdom",
+        "latitude": 51.54067,
+        "longitude": -0.11675
+    },
+    {
         "name": "Bethnal Green",
         "country": "United Kingdom",
         "latitude": 51.52718,
         "longitude": -0.06109
+    },
+    {
+        "name": "Brixton",
+        "country": "United Kingdom",
+        "latitude": 51.46593,
+        "longitude": -0.10652
+    },
+    {
+        "name": "Brixton Hill",
+        "country": "United Kingdom",
+        "latitude": 51.45213,
+        "longitude": -0.123
     },
     {
         "name": "City of Westminster",
@@ -3270,10 +3330,34 @@
         "longitude": -0.11667
     },
     {
+        "name": "Clerkenwell",
+        "country": "United Kingdom",
+        "latitude": 51.52438,
+        "longitude": -0.11022
+    },
+    {
+        "name": "Harringay",
+        "country": "United Kingdom",
+        "latitude": 51.5824,
+        "longitude": -0.09956
+    },
+    {
+        "name": "Kensington",
+        "country": "United Kingdom",
+        "latitude": 51.50094,
+        "longitude": -0.19175
+    },
+    {
         "name": "London",
         "country": "United Kingdom",
         "latitude": 51.50853,
         "longitude": -0.12574
+    },
+    {
+        "name": "Luton",
+        "country": "United Kingdom",
+        "latitude": 51.87967,
+        "longitude": -0.41748
     },
     {
         "name": "Poplar",
@@ -3286,6 +3370,12 @@
         "country": "United Kingdom",
         "latitude": 51.5,
         "longitude": -0.46667
+    },
+    {
+        "name": "Wood Green",
+        "country": "United Kingdom",
+        "latitude": 51.6,
+        "longitude": -0.11667
     },
     {
         "name": "Broadmoor",

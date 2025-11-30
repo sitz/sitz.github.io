@@ -1838,5 +1838,15 @@
     "endLatLng": "51.4706, -0.46194",
     "distanceMeters": 7213041.234671325,
     "durationSeconds": 36146.0
+   },
+  {
+    "startTime": "2025-11-15T10:12:47.000+01:00",
+    "endTime": "2025-11-15T12:53:39.000+01:00",
+    "startCity": "London",
+    "startLatLng": "51.8747, -0.36833",
+    "endCity": "Warsaw",
+    "endLatLng": "52.1657, 20.9671",
+    "distanceMeters": 1455018.9782568691,
+    "durationSeconds": 9652.0
   }
 ]
