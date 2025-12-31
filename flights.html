@@ -31,7 +31,7 @@
     <title>Flights taken by Sitesh</title>
 
     <!-- Import Apache ECharts -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@6.0.0/dist/echarts.min.js"></script>
     <!-- ECharts GL is required for the globe component -->
     <script src="https://cdn.jsdelivr.net/npm/echarts-gl@2/dist/echarts-gl.min.js"></script>
     <style>
@@ -271,19 +271,19 @@
                             type: 'lines3D',
                             coordinateSystem: 'globe',
                             data: linesData,
+                            colorBy: 'data',
                             effect: {
                                 show: true,
-                                period: 4,
+                                period: 5,
                                 trailLength: 0.1,
-                                color: '#fff',
-                                symbolSize: 2
+                                symbol: 'arrow',
+                                symbolSize: 10,
                             },
                             lineStyle: {
-                                width: 1.5,
-                                opacity: 0.6
+                                width: 0.2,
+                                opacity: 0.5
                             },
                             blendMode: 'lighter',
-                            tooltip: { show: true }
                         },
                         {
                             name: 'Airports',
@@ -291,29 +291,16 @@
                             coordinateSystem: 'globe',
                             data: pointsData,
                             symbol: 'pin',
-                            symbolSize: 8,
-                            itemStyle: {
-                                opacity: 0.9
-                            },
+                            symbolSize: 10,
                             label: {
-                                show: false
-                            },
-                            emphasis: {
-                                itemStyle: {
-                                    borderColor: '#fff',
-                                    borderWidth: 1
-                                },
-                                label: {
-                                    show: false
-                                }
+                                position: 'inside',
+                                formatter: '{b}',
+                                fontSize: 10,
+                                textMargin: 10
                             },
                             tooltip: {
-                                show: true,
-                                formatter: function(params) {
-                                    const info = params.data.tooltipInfo;
-                                    return `<b>✈️ ${info.city}</b>`;
-                                }
-                            }
+                                show: false,
+                            },
                         }
                     ]
                 };

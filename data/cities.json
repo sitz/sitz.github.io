@@ -444,6 +444,12 @@
         "longitude": 15.82528
     },
     {
+        "name": "Brno",
+        "country": "Czechia",
+        "latitude": 49.19522,
+        "longitude": 16.60796
+    },
+    {
         "name": "Karlin",
         "country": "Czechia",
         "latitude": 50.09272,
@@ -2778,10 +2784,52 @@
         "longitude": 74.34361
     },
     {
+        "name": "Brzezinka",
+        "country": "Poland",
+        "latitude": 50.04237,
+        "longitude": 19.1902
+    },
+    {
+        "name": "Chorzow",
+        "country": "Poland",
+        "latitude": 50.30582,
+        "longitude": 18.9742
+    },
+    {
+        "name": "Katowice",
+        "country": "Poland",
+        "latitude": 50.25841,
+        "longitude": 19.02754
+    },
+    {
+        "name": "Kielce",
+        "country": "Poland",
+        "latitude": 50.87033,
+        "longitude": 20.62752
+    },
+    {
+        "name": "Krakow",
+        "country": "Poland",
+        "latitude": 50.06143,
+        "longitude": 19.93658
+    },
+    {
+        "name": "Lublin",
+        "country": "Poland",
+        "latitude": 51.25,
+        "longitude": 22.56667
+    },
+    {
         "name": "Ochota",
         "country": "Poland",
         "latitude": 52.22096,
         "longitude": 20.98526
+    },
+    {
+        "name": "Oswiecim",
+        "country": "Poland",
+        "latitude": 50.03437,
+        "longitude": 19.21037
     },
     {
         "name": "Poznan",
@@ -2992,6 +3040,12 @@
         "country": "Singapore",
         "latitude": 1.28967,
         "longitude": 103.85007
+    },
+    {
+        "name": "Bratislava",
+        "country": "Slovakia",
+        "latitude": 48.14816,
+        "longitude": 17.10674
     },
     {
         "name": "Arganzuela",

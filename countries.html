@@ -58,6 +58,9 @@
             map = new Datamap({
                 element: document.getElementById('container'),
                 projection: 'mercator',
+                geographyConfig: {
+                    highlightOnHover: false
+                },
                 fills: {
                     defaultFill: 'skyblue',
                     travelled: 'darkgreen'
