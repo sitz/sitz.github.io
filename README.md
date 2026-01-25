@@ -6,40 +6,40 @@ Personal portfolio website showcasing code, projects, and interactive data visua
 
 Interactive map-based visualizations.
 
-### Countries
-Map of all countries visited
+- ### Countries
+  Map of all countries visited
 
-<a href="https://code.siteshshrivastava.com/countries.html"><img src="assets/preview_countries.png" width="400"></a>
+  <p align="center"><a href="https://code.siteshshrivastava.com/countries.html"><img src="assets/preview_countries.png" width="400"></a></p>
 
-### Cities
-Map of cities travelled
+- ### Cities
+  Map of cities travelled
 
-<a href="https://code.siteshshrivastava.com/cities.html"><img src="assets/preview_cities.png" width="400"></a>
+  <p align="center"><a href="https://code.siteshshrivastava.com/cities.html"><img src="assets/preview_cities.png" width="400"></a></p>
 
-### Flights
-Interactive flight route map
+- ### Flights
+  Interactive flight route map
 
-<a href="https://code.siteshshrivastava.com/flights.html"><img src="assets/preview_flights.png" width="400"></a>
+  <p align="center"><a href="https://code.siteshshrivastava.com/flights.html"><img src="assets/preview_flights.png" width="400"></a></p>
 
-### Uber
-Map of Uber rides taken
+- ### Uber
+  Map of Uber rides taken
 
-<a href="https://code.siteshshrivastava.com/uber.html"><img src="assets/preview_uber.png" width="400"></a>
+  <p align="center"><a href="https://code.siteshshrivastava.com/uber.html"><img src="assets/preview_uber.png" width="400"></a></p>
 
-### ClassPass
-Map of ClassPass workout locations
+- ### ClassPass
+  Map of ClassPass workout locations
 
-<a href="https://code.siteshshrivastava.com/classpass.html"><img src="assets/preview_classpass.png" width="400"></a>
+  <p align="center"><a href="https://code.siteshshrivastava.com/classpass.html"><img src="assets/preview_classpass.png" width="400"></a></p>
 
-### Adventures
-Map of adventure activity spots
+- ### Adventures
+  Map of adventure activity spots
 
-<a href="https://code.siteshshrivastava.com/adventures.html"><img src="assets/preview_adventures.png" width="400"></a>
+  <p align="center"><a href="https://code.siteshshrivastava.com/adventures.html"><img src="assets/preview_adventures.png" width="400"></a></p>
 
-### Booking.com
-Map of hotel stays
+- ### Booking.com
+  Map of hotel stays
 
-<a href="https://code.siteshshrivastava.com/booking.html"><img src="assets/preview_booking.png" width="400"></a>
+  <p align="center"><a href="https://code.siteshshrivastava.com/booking.html"><img src="assets/preview_booking.png" width="400"></a></p>
 
 ## 🤖 Trend Bots
 
