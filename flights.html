@@ -12,7 +12,7 @@
     </script>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="description" content="Map of flight routes taken by Sitesh Shrivastava">
     <meta name="keywords" content="Map, Flights, Travel">
@@ -26,293 +26,539 @@
     <meta name="twitter:image" content="https://code.siteshshrivastava.com/assets/preview_flights.png">
 
     <link rel="canonical" href="https://code.siteshshrivastava.com/flights">
-    <link rel="shortcut icon" href="assets/favicon.ico"/>
+    <link rel="shortcut icon" href="assets/favicon.ico">
 
     <title>Flights taken by Sitesh</title>
 
-    <!-- Import Apache ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@6.0.0/dist/echarts.min.js"></script>
-    <!-- ECharts GL is required for the globe component -->
     <script src="https://cdn.jsdelivr.net/npm/echarts-gl@2/dist/echarts-gl.min.js"></script>
+
     <style>
-        html, body {
+        :root {
+            --bg: #f5efe5;
+            --bg-accent: #e7ddd0;
+            --panel: rgba(252, 249, 243, 0.9);
+            --panel-border: rgba(80, 67, 53, 0.12);
+            --text: #2c241d;
+            --muted: #75695d;
+            --shadow: 0 28px 70px rgba(56, 62, 60, 0.09);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
             width: 100%;
             height: 100%;
             margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background: #000;
-            touch-action: none;
         }
-        #globeViz {
-            position: absolute;
-            left: 0;
-            top: 0;
+
+        body {
+            overflow: hidden;
+            background:
+                radial-gradient(circle at top, rgba(255, 255, 255, 0.68), transparent 32%),
+                linear-gradient(170deg, var(--bg) 0%, var(--bg-accent) 100%);
+            color: var(--text);
+            font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+        }
+
+        .stage {
+            position: relative;
             width: 100%;
             height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            overflow: hidden;
         }
-        body {
-            overscroll-behavior: none;
+
+        #globeViz {
+            position: absolute;
+            inset: 0;
+            touch-action: none;
+        }
+
+        .summary-bar,
+        .fallback {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            width: min(1080px, calc(100% - 32px));
+            border: 1px solid var(--panel-border);
+            background: var(--panel);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(18px);
+        }
+
+        .summary-bar {
+            bottom: 18px;
+            padding: 13px 22px;
+            border-radius: 999px;
+            text-align: center;
+            font-size: 15px;
+            line-height: 1.45;
+            color: var(--text);
+            letter-spacing: 0.01em;
+        }
+
+        .summary-bar span {
+            color: var(--muted);
+        }
+
+        .fallback {
+            top: 24px;
+            width: min(540px, calc(100% - 32px));
+            padding: 18px 22px;
+            border-radius: 22px;
+            display: none;
+        }
+
+        .fallback h1 {
+            margin: 0 0 8px;
+            font-size: 26px;
+            font-weight: 600;
+        }
+
+        .fallback p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .stage.globe-unavailable .fallback {
+            display: block;
+        }
+
+        @media (max-width: 720px) {
+            .summary-bar {
+                bottom: 12px;
+                padding: 14px 18px;
+                border-radius: 22px;
+                font-size: 14px;
+            }
+
+            .fallback {
+                top: 12px;
+                padding: 16px 18px;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="globeViz"></div>
+    <main class="stage" id="stage">
+        <div id="globeViz"></div>
+
+        <div class="fallback">
+            <h1>Globe unavailable</h1>
+            <p>
+                The page could not render its 3D globe in this browser. The flight summary remains available below.
+            </p>
+        </div>
+
+        <div class="summary-bar" id="summaryBar">Loading flights...</div>
+    </main>
 
     <script>
-        // --- Helper Functions ---
+        const stage = document.getElementById('stage');
+        const globeContainer = document.getElementById('globeViz');
+        const summaryBar = document.getElementById('summaryBar');
+        const globeTextureUrl = 'assets/world-countries-light.svg';
+        const routeColor = '#b44b2a';
+        const cityColor = '#b44b2a';
 
-        // Simple hash function to generate a color from a string (city name)
-        function stringToHslColor(str, s = 70, l = 55) {
-            if (!str) return 'hsl(0, 0%, 80%)'; // Default grey
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                hash = str.charCodeAt(i) + ((hash << 5) - hash);
-                hash = hash & hash; // Convert to 32bit integer
-            }
-            const h = Math.abs(hash % 360);
-            return `hsl(${h}, ${s}%, ${l}%)`;
-        }
-
-        // Format duration in seconds to hours/minutes string
-        function formatDuration(seconds) {
-            if (isNaN(seconds) || seconds === null || seconds < 0) return 'N/A';
-            const h = Math.floor(seconds / 3600);
-            const m = Math.floor((seconds % 3600) / 60);
-            let str = '';
-            if (h > 0) str += `${h}h `;
-            if (m > 0 || h === 0) str += `${m}m`; // Show minutes even if 0 hours
-            return str.trim() || '0m'; // Handle case where duration is < 1 min
-        }
-
-        // Format distance in meters to km string
+        const numberFormatter = new Intl.NumberFormat('en-US');
         function formatDistance(meters) {
-             if (isNaN(meters) || meters === null || meters < 0) return 'N/A';
-             return `${Math.round(meters / 1000)} km`;
+            if (!Number.isFinite(meters)) return 'N/A';
+            return `${numberFormatter.format(Math.round(meters / 1000))} km`;
         }
 
-        // --- Data Processing for ECharts ---
-        function processFlightDataForEcharts(data) {
-            const linesData = [];
-            const pointsMap = new Map();
-            const cityColors = new Map();
-            const uniqueCities = new Set();
+        function formatDuration(seconds) {
+            if (!Number.isFinite(seconds)) return 'N/A';
+            const totalMinutes = Math.round(seconds / 60);
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+            if (hours === 0) return `${minutes}m`;
+            if (minutes === 0) return `${hours}h`;
+            return `${hours}h ${minutes}m`;
+        }
+
+        function formatCityPair(nameA, nameB) {
+            return [nameA, nameB].sort((left, right) => left.localeCompare(right)).join(' <-> ');
+        }
+
+        function parseCoords(latLngStr) {
+            if (!latLngStr) return null;
+            const [lat, lon] = latLngStr.split(',').map(Number);
+            if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+            return [lon, lat];
+        }
+
+        function normalizeLongitude(lon) {
+            let value = lon;
+            while (value <= -180) value += 360;
+            while (value > 180) value -= 360;
+            return value;
+        }
+
+        function clamp(value, min, max) {
+            return Math.max(min, Math.min(max, value));
+        }
+
+        function buildFlightModel(data) {
+            const cityMap = new Map();
+            const routeMap = new Map();
+            let totalDistance = 0;
+            let totalDuration = 0;
+            let totalFlights = 0;
 
             data.forEach(flight => {
-                if (flight.startCity) uniqueCities.add(flight.startCity);
-                if (flight.endCity) uniqueCities.add(flight.endCity);
+                const startCoords = parseCoords(flight.startLatLng);
+                const endCoords = parseCoords(flight.endLatLng);
+                if (!startCoords || !endCoords) return;
+
+                const startCityName = flight.startCity || 'Unknown';
+                const endCityName = flight.endCity || 'Unknown';
+
+                totalFlights += 1;
+                totalDistance += Number(flight.distanceMeters) || 0;
+                totalDuration += Number(flight.durationSeconds) || 0;
+
+                if (!cityMap.has(startCityName)) {
+                    cityMap.set(startCityName, {
+                        name: startCityName,
+                        lonTotal: 0,
+                        latTotal: 0,
+                        samples: 0,
+                        departures: 0,
+                        arrivals: 0
+                    });
+                }
+                if (!cityMap.has(endCityName)) {
+                    cityMap.set(endCityName, {
+                        name: endCityName,
+                        lonTotal: 0,
+                        latTotal: 0,
+                        samples: 0,
+                        departures: 0,
+                        arrivals: 0
+                    });
+                }
+
+                const startCity = cityMap.get(startCityName);
+                const endCity = cityMap.get(endCityName);
+
+                startCity.lonTotal += startCoords[0];
+                startCity.latTotal += startCoords[1];
+                startCity.samples += 1;
+                startCity.departures += 1;
+
+                endCity.lonTotal += endCoords[0];
+                endCity.latTotal += endCoords[1];
+                endCity.samples += 1;
+                endCity.arrivals += 1;
+
+                const cityNames = [startCityName, endCityName].sort((left, right) => left.localeCompare(right));
+                const routeKey = cityNames.join('::');
+
+                if (!routeMap.has(routeKey)) {
+                    routeMap.set(routeKey, {
+                        pair: formatCityPair(cityNames[0], cityNames[1]),
+                        cityNames,
+                        flights: 0,
+                        distanceMeters: 0,
+                        durationSeconds: 0
+                    });
+                }
+
+                const route = routeMap.get(routeKey);
+                route.flights += 1;
+                route.distanceMeters += Number(flight.distanceMeters) || 0;
+                route.durationSeconds += Number(flight.durationSeconds) || 0;
             });
 
-            const cityArray = Array.from(uniqueCities);
-            const numCities = cityArray.length;
-            cityArray.forEach((city, index) => {
-                const hue = Math.round((index * 360) / numCities);
-                cityColors.set(city, `hsl(${hue}, 70%, 55%)`);
-            });
-            const defaultColor = 'hsl(0, 0%, 80%)';
-
-            data.forEach((flight, index) => {
-                function getCoords(latLngStr) {
-                    if (!latLngStr) return [NaN, NaN];
-                    const [lat, lon] = latLngStr.split(',').map(Number);
-                    return [lon, lat];
-                }
-                const startCoords = getCoords(flight.startLatLng);
-                const endCoords = getCoords(flight.endLatLng);
-                const startCity = flight.startCity || 'Unknown';
-                const endCity = flight.endCity || 'Unknown';
-
-                if (isNaN(startCoords[0]) || isNaN(startCoords[1]) || isNaN(endCoords[0]) || isNaN(endCoords[1])) {
-                    return;
-                }
-
-                const startColor = cityColors.get(startCity) || defaultColor;
-                const endColor = cityColors.get(endCity) || defaultColor;
-
-                linesData.push({
+            const cities = Array.from(cityMap.values())
+                .map(city => ({
+                    name: city.name,
                     coords: [
-                        startCoords,
-                        endCoords
+                        city.lonTotal / city.samples,
+                        city.latTotal / city.samples
                     ],
-                    tooltipInfo: {
-                        from: startCity,
-                        to: endCity,
-                        distance: flight.distanceMeters,
-                        duration: flight.durationSeconds,
-                        color: startColor
+                    departures: city.departures,
+                    arrivals: city.arrivals,
+                    movements: city.departures + city.arrivals
+                }))
+                .sort((left, right) => left.name.localeCompare(right.name));
+
+            const cityLookup = new Map(cities.map(city => [city.name, city]));
+
+            const routes = Array.from(routeMap.values())
+                .map(route => ({
+                    pair: route.pair,
+                    coords: [
+                        cityLookup.get(route.cityNames[0]).coords,
+                        cityLookup.get(route.cityNames[1]).coords
+                    ],
+                    flights: route.flights,
+                    distanceMeters: route.distanceMeters,
+                    durationSeconds: route.durationSeconds
+                }))
+                .sort((left, right) => {
+                    if (right.flights !== left.flights) {
+                        return right.flights - left.flights;
+                    }
+                    return left.pair.localeCompare(right.pair);
+                });
+
+            const sortedLongitudes = cities
+                .map(city => ((city.coords[0] % 360) + 360) % 360)
+                .sort((left, right) => left - right);
+
+            let targetLongitude = 0;
+            if (sortedLongitudes.length === 1) {
+                targetLongitude = normalizeLongitude(sortedLongitudes[0]);
+            } else if (sortedLongitudes.length > 1) {
+                let largestGap = -1;
+                let gapMidpoint = 0;
+
+                sortedLongitudes.forEach((lon, index) => {
+                    const nextLon = index === sortedLongitudes.length - 1
+                        ? sortedLongitudes[0] + 360
+                        : sortedLongitudes[index + 1];
+                    const gap = nextLon - lon;
+
+                    if (gap > largestGap) {
+                        largestGap = gap;
+                        gapMidpoint = lon + gap / 2;
                     }
                 });
 
-                const startKey = `${startCoords[0]},${startCoords[1]}`;
-                if (!pointsMap.has(startKey)) {
-                    pointsMap.set(startKey, {
-                        name: startCity,
-                        value: [startCoords[0], startCoords[1], 0],
-                        itemStyle: { color: startColor },
-                        tooltipInfo: { city: startCity }
-                    });
-                }
+                targetLongitude = normalizeLongitude(gapMidpoint + 180);
+            }
 
-                const endKey = `${endCoords[0]},${endCoords[1]}`;
-                if (!pointsMap.has(endKey)) {
-                    pointsMap.set(endKey, {
-                        name: endCity,
-                        value: [endCoords[0], endCoords[1], 0],
-                        itemStyle: { color: endColor },
-                        tooltipInfo: { city: endCity }
-                    });
-                }
-            });
+            const meanLatitude = cities.length
+                ? cities.reduce((sum, city) => sum + city.coords[1], 0) / cities.length
+                : 0;
 
-            const pointsData = Array.from(pointsMap.values());
             return {
-                linesData,
-                pointsData
+                summary: {
+                    totalFlights,
+                    totalCities: cities.length,
+                    totalRoutes: routes.length,
+                    totalDistance,
+                    totalDuration
+                },
+                routes,
+                cities,
+                viewTarget: [
+                    targetLongitude,
+                    clamp(meanLatitude * 0.35, -14, 14)
+                ]
             };
         }
 
-        // --- Responsive Globe Zoom and Centering ---
+        function buildSummaryLine(summary) {
+            return [
+                `${numberFormatter.format(summary.totalCities)} cities`,
+                `${numberFormatter.format(summary.totalRoutes)} routes`,
+                `${numberFormatter.format(summary.totalFlights)} flights`,
+                `${numberFormatter.format(Math.round(summary.totalDuration / 3600))} hours`,
+                `${numberFormatter.format(Math.round(summary.totalDistance / 1000))} km`
+            ].join(' <span>•</span> ');
+        }
+
+        function supportsWebGL() {
+            const canvas = document.createElement('canvas');
+            return Boolean(
+                canvas.getContext('webgl') ||
+                canvas.getContext('experimental-webgl') ||
+                canvas.getContext('webgl2')
+            );
+        }
+
         function getResponsiveDistance() {
-            return Math.min(window.innerWidth, window.innerHeight);
+            const { width, height } = globeContainer.getBoundingClientRect();
+            return Math.max(120, Math.min(width, height) * 0.66);
         }
 
-        function setGlobeOptionWithDistance(myChart, option) {
-            option.globe.viewControl.distance = getResponsiveDistance();
-            myChart.setOption(option, true);
+        function citySymbolSize(city) {
+            return Math.min(13, 8 + Math.sqrt(city.movements) * 0.45);
         }
 
-        // --- Load flight data and initialize chart ---
-        fetch('data/flights.json')
-            .then(response => response.json())
-            .then(flightData => {
-                const { linesData, pointsData } = processFlightDataForEcharts(flightData);
+        function buildChartOption(model) {
+            const routeBandSeries = [
+                {
+                    name: 'Single flights',
+                    minFlights: 1,
+                    maxFlights: 1,
+                    width: 1.1,
+                    opacity: 0.18
+                },
+                {
+                    name: 'Repeated flights',
+                    minFlights: 2,
+                    maxFlights: 4,
+                    width: 2.1,
+                    opacity: 0.34
+                },
+                {
+                    name: 'Frequent flights',
+                    minFlights: 5,
+                    maxFlights: Infinity,
+                    width: 3.6,
+                    opacity: 0.54
+                }
+            ].map(seriesConfig => ({
+                name: seriesConfig.name,
+                type: 'lines3D',
+                coordinateSystem: 'globe',
+                blendMode: 'source-over',
+                data: model.routes
+                    .filter(route => route.flights >= seriesConfig.minFlights && route.flights <= seriesConfig.maxFlights)
+                    .map(route => ({
+                        coords: route.coords,
+                        tooltipInfo: route
+                    })),
+                lineStyle: {
+                    color: routeColor,
+                    width: seriesConfig.width,
+                    opacity: seriesConfig.opacity
+                }
+            })).filter(series => series.data.length > 0);
 
-                const option = {
-                    backgroundColor: '#000',
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: function (params) {
-                            if (params.componentSubType === 'lines3D') {
-                                const info = params.data.tooltipInfo;
-                                return `<b>${info.from} &rarr; ${info.to}</b><br>` +
-                                       `Distance: ${formatDistance(info.distance)}<br>` +
-                                       `Duration: ${formatDuration(info.duration)}`;
-                            } else if (params.componentSubType === 'scatter3D') {
-                                const info = params.data.tooltipInfo;
-                                return `<b>✈️ ${info.city}</b>`;
-                            }
-                            return '';
-                        },
-                        confine: true,
-                        textStyle: {
-                            fontSize: 14,
-                            color: '#eee'
-                        },
-                        padding: 0,
-                        extraCssText: 'background: transparent; box-shadow: none;'
+            return {
+                backgroundColor: 'transparent',
+                tooltip: {
+                    trigger: 'item',
+                    triggerOn: 'mousemove|click',
+                    confine: true,
+                    backgroundColor: 'rgba(250, 248, 241, 0.96)',
+                    borderColor: 'rgba(54, 77, 71, 0.12)',
+                    borderWidth: 1,
+                    textStyle: {
+                        color: '#20312d',
+                        fontSize: 13
                     },
-                    globe: {
-                        baseTexture: 'assets/world.topo.bathy.200401.jpg',
-                        heightTexture: 'assets/bathymetry_bw_composite_4k.jpg',
-                        environment: 'assets/starfield.jpg',
-
-                        shading: 'realistic',
-                        realisticMaterial: {
-                            roughness: 0.8,
-                            metalness: 0
-                        },
-                        postEffect: {
-                            enable: true, // Enable post-processing effects like bloom
-                            // Optional: Add bloom effect
-                            bloom: {
-                                enable: true,
-                                bloomIntensity: 0.1
-                            }
-                        },
-                        temporalSuperSampling: { // Smoother edges when rotating
-                            enable: true
-                        },
-                        light: {
-                            main: {
-                                intensity: 2, // Stronger main light
-                                shadow: true // Enable shadows
-                            },
-                            ambient: {
-                                intensity: 0.5 // Ambient light
-                            },
-                            ambientCubemap: {
-                                texture: 'assets/lake.hdr', // Environment map for reflections
-                                diffuseIntensity: 0.5,
-                                specularIntensity: 1
-                            }
-                        },
-                        viewControl: {
-                            autoRotate: true,
-                            autoRotateSpeed: 10,
-                            targetCoord: [-122.431297, 37.773972]
-                        },
-                        atmosphere: {
-                            show: true, // Show atmospheric glow
-                            color: '#3a8fc1'
-                        },
-                        layers: [{ // Add a base layer for visual appeal if needed
-                            type: 'blend',
-                            texture: 'assets/night.jpg', // Optional night texture
-                            shading: 'lambert',
-                            distance: 5 // Adjust distance if using night texture
-                        }]
-                    },
-                    series: [
-                        {
-                            name: 'Flights',
-                            type: 'lines3D',
-                            coordinateSystem: 'globe',
-                            data: linesData,
-                            colorBy: 'data',
-                            effect: {
-                                show: true,
-                                period: 5,
-                                trailLength: 0.1,
-                                symbol: 'arrow',
-                                symbolSize: 10,
-                            },
-                            lineStyle: {
-                                width: 0.2,
-                                opacity: 0.5
-                            },
-                            blendMode: 'lighter',
-                        },
-                        {
-                            name: 'Airports',
-                            type: 'scatter3D',
-                            coordinateSystem: 'globe',
-                            data: pointsData,
-                            symbol: 'pin',
-                            symbolSize: 10,
-                            label: {
-                                position: 'inside',
-                                formatter: '{b}',
-                                fontSize: 10,
-                                textMargin: 10
-                            },
-                            tooltip: {
-                                show: false,
-                            },
+                    formatter(params) {
+                        if (params.componentSubType === 'scatter3D') {
+                            const info = params.data && params.data.tooltipInfo;
+                            const cityName = info && info.name ? info.name : params.data && params.data.name;
+                            return cityName ? `<strong>${cityName}</strong>` : '';
                         }
-                    ]
-                };
 
-                const myChart = echarts.init(document.getElementById('globeViz'));
-                myChart.setOption(option);
+                        if (params.data && params.data.tooltipInfo) {
+                            const info = params.data.tooltipInfo;
+                            return [
+                                `<strong>${info.pair}</strong>`,
+                                `${numberFormatter.format(info.flights)} flights`,
+                                `${formatDistance(info.distanceMeters)}`,
+                                `${formatDuration(info.durationSeconds)} in the air`
+                            ].join('<br>');
+                        }
 
-                // Responsive: update globe zoom and keep centered on resize
-                window.addEventListener('resize', () => {
-                    myChart.resize();
-                    setGlobeOptionWithDistance(myChart, option);
+                        return '';
+                    }
+                },
+                globe: {
+                    baseTexture: globeTextureUrl,
+                    shading: 'color',
+                    light: {
+                        main: {
+                            intensity: 0,
+                            shadow: false
+                        },
+                        ambient: {
+                            intensity: 1
+                        }
+                    },
+                    viewControl: {
+                        autoRotate: false,
+                        alpha: 12,
+                        beta: 0,
+                        targetCoord: model.viewTarget,
+                        distance: getResponsiveDistance(),
+                        minDistance: 105,
+                        maxDistance: 250
+                    },
+                    atmosphere: {
+                        show: false
+                    }
+                },
+                series: [
+                    ...routeBandSeries,
+                    {
+                        name: 'Cities',
+                        type: 'scatter3D',
+                        coordinateSystem: 'globe',
+                        symbol: 'pin',
+                        label: {
+                            show: false
+                        },
+                        emphasis: {
+                            label: {
+                                show: false
+                            }
+                        },
+                        data: model.cities.map(city => ({
+                            name: city.name,
+                            value: [city.coords[0], city.coords[1], 0],
+                            symbolSize: citySymbolSize(city),
+                            tooltipInfo: city,
+                            itemStyle: {
+                                color: cityColor,
+                                opacity: 0.88
+                            }
+                        }))
+                    }
+                ]
+            };
+        }
+
+        function showFallback(message) {
+            stage.classList.add('globe-unavailable');
+            if (message) {
+                summaryBar.textContent = message;
+            }
+        }
+
+        function initializeChart(model) {
+            if (!supportsWebGL()) {
+                showFallback('WebGL unavailable');
+                return;
+            }
+
+            const chart = echarts.init(globeContainer, null, {
+                renderer: 'canvas'
+            });
+            const option = buildChartOption(model);
+            chart.setOption(option);
+
+            window.addEventListener('resize', () => {
+                option.globe.viewControl.distance = getResponsiveDistance();
+                chart.resize();
+                chart.setOption({
+                    globe: {
+                        viewControl: option.globe.viewControl
+                    }
                 });
+            });
+        }
+
+        fetch('data/flights.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Unable to load flights: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(flightData => {
+                const model = buildFlightModel(flightData);
+                summaryBar.innerHTML = buildSummaryLine(model.summary);
+                initializeChart(model);
+            })
+            .catch(error => {
+                console.error(error);
+                showFallback('Unable to load globe data');
             });
     </script>
 </body>
