@@ -28,9 +28,9 @@
 
     <title>Countries visited by Sitesh</title>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/datamaps/0.5.9/datamaps.world.hires.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@3.5.17/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson@1.6.27/build/topojson.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datamaps@0.5.10/dist/datamaps.world.hires.min.js"></script>
 
 </head>
 
@@ -38,7 +38,7 @@
     #container {
         position: relative;
         width: 100%;
-        height: 90%;
+        height: 90vh;
     }
 </style>
 
@@ -46,29 +46,39 @@
 <div id="container"></div>
 <h3 align="center"></h3>
 <script>
-    var map;
-    fetch('data/countries.json')
-        .then(response => response.json())
-        .then(visitedCountries => {
-            const formattedData = {};
-            visitedCountries.forEach(country => {
-                formattedData[country] = {fillKey: 'travelled'};
-            });
-
-            map = new Datamap({
-                element: document.getElementById('container'),
-                projection: 'mercator',
-                geographyConfig: {
-                    highlightOnHover: false
-                },
-                fills: {
-                    defaultFill: 'skyblue',
-                    travelled: 'darkgreen'
-                },
-                data: formattedData
-            });
-            document.body.querySelector('h3').innerText = `World Travel Stats (${visitedCountries.length} / ${window.Datamap.prototype.worldTopo.objects.world.geometries.length})`;
-        });
+    var map = new Datamap({
+        element: document.getElementById('container'),
+        scope: 'world',
+        projection: 'mercator',
+        responsive: false,
+        dataType: 'json',
+        dataUrl: 'data/countries.json',
+        geographyConfig: {
+            hideAntarctica: true,
+            borderColor: '#ffffff',
+            borderWidth: 0.8,
+            borderOpacity: 1,
+            highlightOnHover: true,
+            popupOnHover: true,
+            highlightFillColor: function(data) {
+                return data && data.fillKey === 'travelled' ? '#3d8a50' : '#9cc8df';
+            },
+            highlightFillOpacity: 1,
+            highlightBorderColor: '#ffffff',
+            highlightBorderWidth: 1,
+            highlightBorderOpacity: 1
+        },
+        fills: {
+            defaultFill: '#c7e4f3',
+            travelled: '#2f6b3f'
+        },
+        done: function(datamap) {
+            function updateStats() {
+                document.body.querySelector('h3').innerText = `World Travel Stats (${Object.keys(datamap.options.data).length} / ${window.Datamap.prototype.worldTopo.objects.world.geometries.length})`;
+            }
+            window.setTimeout(updateStats, 100);
+        }
+    });
 </script>
 
 </body>
