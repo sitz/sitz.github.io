@@ -76,7 +76,7 @@
             function updateStats() {
                 document.body.querySelector('h3').innerText = `World Travel Stats (${Object.keys(datamap.options.data).length} / ${window.Datamap.prototype.worldTopo.objects.world.geometries.length})`;
             }
-            window.setTimeout(updateStats, 100);
+            window.setTimeout(updateStats, 1000);
         }
     });
 </script>

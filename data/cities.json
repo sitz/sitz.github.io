@@ -768,6 +768,18 @@
         "longitude": 13.41053
     },
     {
+        "name": "Berlin Schoeneberg",
+        "country": "Germany",
+        "latitude": 52.48388,
+        "longitude": 13.3477
+    },
+    {
+        "name": "Berlin Treptow",
+        "country": "Germany",
+        "latitude": 52.49376,
+        "longitude": 13.44469
+    },
+    {
         "name": "Bezirk Kreuzberg",
         "country": "Germany",
         "latitude": 52.49973,
@@ -882,6 +894,12 @@
         "longitude": 11.45486
     },
     {
+        "name": "Halensee",
+        "country": "Germany",
+        "latitude": 52.49005,
+        "longitude": 13.29602
+    },
+    {
         "name": "Hamburg",
         "country": "Germany",
         "latitude": 53.57532,
@@ -904,6 +922,12 @@
         "country": "Germany",
         "latitude": 52.37052,
         "longitude": 9.73322
+    },
+    {
+        "name": "Hansaviertel",
+        "country": "Germany",
+        "latitude": 52.51853,
+        "longitude": 13.34178
     },
     {
         "name": "Herzogenaurach",
@@ -1080,10 +1104,22 @@
         "longitude": 13.36667
     },
     {
+        "name": "Treptow Bezirk",
+        "country": "Germany",
+        "latitude": 52.48863,
+        "longitude": 13.4586
+    },
+    {
         "name": "Triberg im Schwarzwald",
         "country": "Germany",
         "latitude": 48.13175,
         "longitude": 8.23317
+    },
+    {
+        "name": "Wilmersdorf Bezirk",
+        "country": "Germany",
+        "latitude": 52.48333,
+        "longitude": 13.31667
     },
     {
         "name": "Agios Pavlos",
