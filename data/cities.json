@@ -294,6 +294,12 @@
         "longitude": 88.4743
     },
     {
+        "name": "Guangzhou",
+        "country": "China",
+        "latitude": 23.11667,
+        "longitude": 113.25
+    },
+    {
         "name": "Hongkou",
         "country": "China",
         "latitude": 31.25,
@@ -304,6 +310,12 @@
         "country": "China",
         "latitude": 31.2069,
         "longitude": 121.28672
+    },
+    {
+        "name": "Huadong",
+        "country": "China",
+        "latitude": 23.43631,
+        "longitude": 113.32289
     },
     {
         "name": "Huamu",
@@ -370,6 +382,18 @@
         "country": "China",
         "latitude": 22.54554,
         "longitude": 114.0683
+    },
+    {
+        "name": "Suidong",
+        "country": "China",
+        "latitude": 23.08458,
+        "longitude": 113.50634
+    },
+    {
+        "name": "Wushan",
+        "country": "China",
+        "latitude": 23.15888,
+        "longitude": 113.34684
     },
     {
         "name": "Dubrovnik",
@@ -1434,6 +1458,12 @@
         "longitude": 78.49969
     },
     {
+        "name": "Bali",
+        "country": "India",
+        "latitude": 22.64859,
+        "longitude": 88.34115
+    },
+    {
         "name": "Bamboo Flat",
         "country": "India",
         "latitude": 11.7,
@@ -1456,6 +1486,12 @@
         "country": "India",
         "latitude": 22.56667,
         "longitude": 88.35
+    },
+    {
+        "name": "Baranagar",
+        "country": "India",
+        "latitude": 22.64132,
+        "longitude": 88.37727
     },
     {
         "name": "Barka Kana",
@@ -1528,6 +1564,12 @@
         "country": "India",
         "latitude": 15.39835,
         "longitude": 73.84216
+    },
+    {
+        "name": "Chik Ballapur",
+        "country": "India",
+        "latitude": 13.43501,
+        "longitude": 77.72781
     },
     {
         "name": "Clement Town",
@@ -1656,6 +1698,12 @@
         "longitude": 91.7458
     },
     {
+        "name": "Hajipur",
+        "country": "India",
+        "latitude": 25.69003,
+        "longitude": 85.20954
+    },
+    {
         "name": "Hoskote",
         "country": "India",
         "latitude": 13.0707,
@@ -1728,6 +1776,12 @@
         "longitude": 74.26417
     },
     {
+        "name": "Lalganj",
+        "country": "India",
+        "latitude": 25.8673,
+        "longitude": 85.17304
+    },
+    {
         "name": "Leh",
         "country": "India",
         "latitude": 34.16504,
@@ -1798,6 +1852,12 @@
         "country": "India",
         "latitude": 28.83893,
         "longitude": 78.77684
+    },
+    {
+        "name": "Motihari",
+        "country": "India",
+        "latitude": 26.65738,
+        "longitude": 84.91922
     },
     {
         "name": "Mumbai",
@@ -1942,6 +2002,12 @@
         "country": "India",
         "latitude": 9.2885,
         "longitude": 79.31271
+    },
+    {
+        "name": "Ramgarh",
+        "country": "India",
+        "latitude": 23.63018,
+        "longitude": 85.51926
     },
     {
         "name": "Ranchi",
@@ -2260,6 +2326,30 @@
         "country": "Italy",
         "latitude": 38.23529,
         "longitude": 15.662
+    },
+    {
+        "name": "Peje",
+        "country": "Kosovo",
+        "latitude": 42.65913,
+        "longitude": 20.28828
+    },
+    {
+        "name": "Pristina",
+        "country": "Kosovo",
+        "latitude": 42.67272,
+        "longitude": 21.16688
+    },
+    {
+        "name": "Prizren",
+        "country": "Kosovo",
+        "latitude": 42.21389,
+        "longitude": 20.73972
+    },
+    {
+        "name": "Strpce",
+        "country": "Kosovo",
+        "latitude": 42.23944,
+        "longitude": 21.02722
     },
     {
         "name": "Pinki",
@@ -3586,29 +3676,5 @@
         "country": "United States",
         "latitude": 37.43355,
         "longitude": -122.20302
-    },
-    {
-        "name": "Peje",
-        "country": "XK",
-        "latitude": 42.65913,
-        "longitude": 20.28828
-    },
-    {
-        "name": "Pristina",
-        "country": "XK",
-        "latitude": 42.67272,
-        "longitude": 21.16688
-    },
-    {
-        "name": "Prizren",
-        "country": "XK",
-        "latitude": 42.21389,
-        "longitude": 20.73972
-    },
-    {
-        "name": "Strpce",
-        "country": "XK",
-        "latitude": 42.23944,
-        "longitude": 21.02722
     }
 ]

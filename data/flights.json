@@ -1878,5 +1878,85 @@
     "endLatLng": "23.3143, 85.3217",
     "distanceMeters": 1373197,
     "durationSeconds": 8849
+  },
+  {
+    "startTime": "2026-05-08T08:26:24.000+05:30",
+    "endTime": "2026-05-08T10:58:09.000+05:30",
+    "startCity": "Ranchi",
+    "startLatLng": "23.3143, 85.3217",
+    "endCity": "Bangalore",
+    "endLatLng": "13.1979, 77.7063",
+    "distanceMeters": 1381937,
+    "durationSeconds": 9105
+  },
+  {
+    "startTime": "2026-05-12T18:20:55.000+05:30",
+    "endTime": "2026-05-12T20:43:52.000+05:30",
+    "startCity": "Bangalore",
+    "startLatLng": "13.1979, 77.7063",
+    "endCity": "Ranchi",
+    "endLatLng": "23.3143, 85.3217",
+    "distanceMeters": 1381937,
+    "durationSeconds": 8577
+  },
+  {
+    "startTime": "2026-06-03T18:09:59.000+05:30",
+    "endTime": "2026-06-03T19:26:43.000+05:30",
+    "startCity": "Ranchi",
+    "startLatLng": "23.3143, 85.3217",
+    "endCity": "Kolkata",
+    "endLatLng": "22.6547, 88.4467",
+    "distanceMeters": 328189,
+    "durationSeconds": 4604
+  },
+  {
+    "startTime": "2026-06-03T21:31:27.000+05:30",
+    "endTime": "2026-06-04T01:27:22.000+05:30",
+    "startCity": "Kolkata",
+    "startLatLng": "22.6547, 88.4467",
+    "endCity": "Guangzhou",
+    "endLatLng": "23.3924, 113.299",
+    "distanceMeters": 2541524,
+    "durationSeconds": 14155
+  },
+  {
+    "startTime": "2026-06-11T02:40:31.000+05:30",
+    "endTime": "2026-06-11T06:48:31.000+05:30",
+    "startCity": "Guangzhou",
+    "startLatLng": "23.3924, 113.299",
+    "endCity": "Kolkata",
+    "endLatLng": "22.6547, 88.4467",
+    "distanceMeters": 2541524,
+    "durationSeconds": 14880
+  },
+  {
+    "startTime": "2026-06-11T13:35:35.000+05:30",
+    "endTime": "2026-06-11T15:52:51.000+05:30",
+    "startCity": "Kolkata",
+    "startLatLng": "22.6547, 88.4467",
+    "endCity": "Ranchi",
+    "endLatLng": "23.3143, 85.3217",
+    "distanceMeters": 328189,
+    "durationSeconds": 8236
+  },
+  {
+    "startTime": "2026-06-13T14:02:08.000+05:30",
+    "endTime": "2026-06-13T14:50:47.000+05:30",
+    "startCity": "Ranchi",
+    "startLatLng": "23.3143, 85.3217",
+    "endCity": "Patna",
+    "endLatLng": "25.5913, 85.088",
+    "distanceMeters": 254293,
+    "durationSeconds": 2919
+  },
+  {
+    "startTime": "2026-06-15T18:25:21.000+05:30",
+    "endTime": "2026-06-15T19:15:42.000+05:30",
+    "startCity": "Patna",
+    "startLatLng": "25.5913, 85.088",
+    "endCity": "Ranchi",
+    "endLatLng": "23.3143, 85.3217",
+    "distanceMeters": 254293,
+    "durationSeconds": 3021
   }
 ]

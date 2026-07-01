@@ -1,42 +1,122 @@
 {
-  "IND": { "fillKey": "travelled" },
-  "USA": { "fillKey": "travelled" },
-  "NLD": { "fillKey": "travelled" },
-  "BEL": { "fillKey": "travelled" },
-  "DEU": { "fillKey": "travelled" },
-  "HRV": { "fillKey": "travelled" },
-  "BIH": { "fillKey": "travelled" },
-  "MNE": { "fillKey": "travelled" },
-  "ALB": { "fillKey": "travelled" },
-  "MKD": { "fillKey": "travelled" },
-  "kosovo": { "fillKey": "travelled" },
-  "SRB": { "fillKey": "travelled" },
-  "ROU": { "fillKey": "travelled" },
-  "BGR": { "fillKey": "travelled" },
-  "GRC": { "fillKey": "travelled" },
-  "ESP": { "fillKey": "travelled" },
-  "AUT": { "fillKey": "travelled" },
-  "LIE": { "fillKey": "travelled" },
-  "CHE": { "fillKey": "travelled" },
-  "ITA": { "fillKey": "travelled" },
-  "FRA": { "fillKey": "travelled" },
-  "MCO": { "fillKey": "travelled" },
-  "CZE": { "fillKey": "travelled" },
-  "HUN": { "fillKey": "travelled" },
-  "DNK": { "fillKey": "travelled" },
-  "SWE": { "fillKey": "travelled" },
-  "FIN": { "fillKey": "travelled" },
-  "EST": { "fillKey": "travelled" },
-  "LVA": { "fillKey": "travelled" },
-  "LTU": { "fillKey": "travelled" },
-  "ISL": { "fillKey": "travelled" },
-  "PRT": { "fillKey": "travelled" },
-  "VAT": { "fillKey": "travelled" },
-  "HKG": { "fillKey": "travelled" },
-  "CHN": { "fillKey": "travelled" },
-  "SGP": { "fillKey": "travelled" },
-  "MYS": { "fillKey": "travelled" },
-  "GBR": { "fillKey": "travelled" },
-  "POL": { "fillKey": "travelled" },
-  "SVK": { "fillKey": "travelled" }
+  "ALB": {
+    "fillKey": "travelled"
+  },
+  "AUT": {
+    "fillKey": "travelled"
+  },
+  "BEL": {
+    "fillKey": "travelled"
+  },
+  "BGR": {
+    "fillKey": "travelled"
+  },
+  "BIH": {
+    "fillKey": "travelled"
+  },
+  "CHE": {
+    "fillKey": "travelled"
+  },
+  "CHN": {
+    "fillKey": "travelled"
+  },
+  "CZE": {
+    "fillKey": "travelled"
+  },
+  "DEU": {
+    "fillKey": "travelled"
+  },
+  "DNK": {
+    "fillKey": "travelled"
+  },
+  "ESP": {
+    "fillKey": "travelled"
+  },
+  "EST": {
+    "fillKey": "travelled"
+  },
+  "FIN": {
+    "fillKey": "travelled"
+  },
+  "FRA": {
+    "fillKey": "travelled"
+  },
+  "GBR": {
+    "fillKey": "travelled"
+  },
+  "GRC": {
+    "fillKey": "travelled"
+  },
+  "HKG": {
+    "fillKey": "travelled"
+  },
+  "HRV": {
+    "fillKey": "travelled"
+  },
+  "HUN": {
+    "fillKey": "travelled"
+  },
+  "IND": {
+    "fillKey": "travelled"
+  },
+  "ISL": {
+    "fillKey": "travelled"
+  },
+  "ITA": {
+    "fillKey": "travelled"
+  },
+  "kosovo": {
+    "fillKey": "travelled"
+  },
+  "LIE": {
+    "fillKey": "travelled"
+  },
+  "LTU": {
+    "fillKey": "travelled"
+  },
+  "LVA": {
+    "fillKey": "travelled"
+  },
+  "MCO": {
+    "fillKey": "travelled"
+  },
+  "MKD": {
+    "fillKey": "travelled"
+  },
+  "MNE": {
+    "fillKey": "travelled"
+  },
+  "MYS": {
+    "fillKey": "travelled"
+  },
+  "NLD": {
+    "fillKey": "travelled"
+  },
+  "POL": {
+    "fillKey": "travelled"
+  },
+  "PRT": {
+    "fillKey": "travelled"
+  },
+  "ROU": {
+    "fillKey": "travelled"
+  },
+  "SGP": {
+    "fillKey": "travelled"
+  },
+  "SRB": {
+    "fillKey": "travelled"
+  },
+  "SVK": {
+    "fillKey": "travelled"
+  },
+  "SWE": {
+    "fillKey": "travelled"
+  },
+  "USA": {
+    "fillKey": "travelled"
+  },
+  "VAT": {
+    "fillKey": "travelled"
+  }
 }
