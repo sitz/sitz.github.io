@@ -1518,6 +1518,12 @@
         "longitude": 72.85107
     },
     {
+        "name": "Bhiwadi",
+        "country": "India",
+        "latitude": 28.21024,
+        "longitude": 76.86056
+    },
+    {
         "name": "Bihar Sharif",
         "country": "India",
         "latitude": 25.19729,
@@ -1882,6 +1888,12 @@
         "country": "India",
         "latitude": 26.12259,
         "longitude": 85.39055
+    },
+    {
+        "name": "Nangloi Jat",
+        "country": "India",
+        "latitude": 28.6786,
+        "longitude": 77.06749
     },
     {
         "name": "Naroda",
